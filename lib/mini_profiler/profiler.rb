@@ -734,7 +734,8 @@ Append the following to your query string:
        startHidden: @config.start_hidden,
        collapseResults: @config.collapse_results,
        htmlContainer: @config.html_container,
-       hiddenCustomFields: @config.snapshot_hidden_custom_fields.join(',')
+       hiddenCustomFields: @config.snapshot_hidden_custom_fields.join(','),
+       nonce: nonce(env)
       }
 
       if current && current.page_struct
@@ -865,6 +866,12 @@ Append the following to your query string:
       end
       self.current = nil
       results
+    end
+
+    def nonce(env)
+      if defined?(Rails)
+        env["action_dispatch.content_security_policy_nonce"]
+      end
     end
   end
 end
